@@ -5,11 +5,10 @@ import math
 
 
 g_logger = logging.getLogger()
-degree_sign= u'\N{DEGREE SIGN}'
+degree_sign = u'\N{DEGREE SIGN}'
 
 
-
-def vertLine(x, y1, y2):  #, color, win):
+def vert_line(x, y1, y2, end_cap=True):  #, color, win):
     logging.debug("calc vert line from ({}, {}) to ({}, {})".format(x, y1, x, y2))
     if y2 < y1:
         delta = -1
@@ -22,12 +21,13 @@ def vertLine(x, y1, y2):  #, color, win):
         # p.draw(win)
         point_data.append([x, y])
         logging.debug("point ({}, {})".format(x, y))
-    point_data.append([x, y2])
-    logging.debug("point ({}, {})".format(x, y2))
+    if end_cap:
+        point_data.append([x, y2])
+        logging.debug("point ({}, {})".format(x, y2))
     return point_data
 
 
-def horzLine(x1, y1, x2):  #, color, win):
+def horiz_line(x1, y1, x2, end_cap=True):  #, color, win):
     logging.debug("calc horiz line from ({}, {}) to ({}, {})".format(x1, y1, x2, y1))
     if x2 < x1:
         delta = -1
@@ -40,14 +40,15 @@ def horzLine(x1, y1, x2):  #, color, win):
         # p.draw(win)
         point_data.append([x, y1])
         logging.debug("point ({}, {})".format(x, y1))
-    point_data.append([x2, y1])
-    logging.debug("point ({}, {})".format(x2, y1))
+    if end_cap:
+        point_data.append([x2, y1])
+        logging.debug("point ({}, {})".format(x2, y1))
     return point_data
 
 
 # Bresenham's line drawing algorithm
 # to handle lines of any orientation
-def line(x1, y1, x2, y2):  #, color, win):
+def line(x1, y1, x2, y2, end_cap=True):  #, color, win):
     point_data = []
     logging.debug("calc line from ({}, {}) to ({}, {})".format(x1, y1, x2, y2))
     # Calculate dx, sx
@@ -89,8 +90,9 @@ def line(x1, y1, x2, y2):  #, color, win):
             point_data.append([x, y1])
             logging.debug("point ({}, {})".format(x, y1))
             y1 += sy
-    point_data.append([x2, y2])
-    logging.debug("point ({}, {})".format(x2, y2))
+    if end_cap:
+        point_data.append([x2, y2])
+        logging.debug("point ({}, {})".format(x2, y2))
     return point_data
 
 
@@ -100,22 +102,22 @@ if __name__ == "__main__":
     logging.debug("Start...")
 
     print("Horiz. lines")
-    tmp_points = horzLine(10, 10, 20)
+    tmp_points = horiz_line(10, 10, 20)
     print(tmp_points)
-    tmp_points = horzLine(10, 10, 10)
+    tmp_points = horiz_line(10, 10, 10)
     print(tmp_points)
-    tmp_points = horzLine(-5, 10, 5)
+    tmp_points = horiz_line(-5, 10, 5)
     print(tmp_points)
     print("{}\n".format("-"*60))
 
     print("Vert. lines")
-    tmp_points = vertLine(10, 10, 20)
+    tmp_points = vert_line(10, 10, 20)
     print(tmp_points)
-    tmp_points = vertLine(10, 10, 10)
+    tmp_points = vert_line(10, 10, 10)
     print(tmp_points)
-    tmp_points = vertLine(10, 20, 10)
+    tmp_points = vert_line(10, 20, 10)
     print(tmp_points)
-    tmp_points = vertLine(10, -5, 5)
+    tmp_points = vert_line(10, -5, 5)
     print(tmp_points)
     print("{}\n".format("-"*60))
 
@@ -158,4 +160,3 @@ if __name__ == "__main__":
         logging.debug("{}{} --> ({}, {}) -> ({}, {})".format(d, degree_sign, x_val, y_val, x_val2, y_val2))
         tmp_points = line(x_val, y_val, x_val2, y_val2)
         print("{}{} -> {}".format(d, degree_sign, tmp_points))
-
